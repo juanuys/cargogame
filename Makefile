@@ -1,4 +1,4 @@
-.PHONY: run dist
+.PHONY: run dist test
 
 dist:
 	rm -rf docs/
@@ -8,3 +8,6 @@ dist:
 
 run:
 	npm run start
+
+test:
+	npm run test
