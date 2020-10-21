@@ -4,7 +4,7 @@
   "description": "A Phaser 3 game template using Parcel bundler",
   "main": "src/index.html",
   "scripts": {
-    "dist": "parcel build src/index.html -d docs --public-url ./",
+    "dist": "parcel build src/index.html -d docs --public-url ./cargogame/",
     "start": "parcel serve src/index.html",
     "clean": "rm -rfv dist && rm -rf .cache",
     "test": "jest --no-cache --watchAll"
