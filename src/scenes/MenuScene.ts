@@ -1,4 +1,5 @@
 import Phaser from 'phaser'
+import eng from "../engine/geom"
 
 export default class MenuScene extends Phaser.Scene {
   constructor () {
@@ -7,15 +8,14 @@ export default class MenuScene extends Phaser.Scene {
 
   create () {
     // background
-    this.add.image(400, 300, 'space')
+    this.add.image(eng.x(), eng.y(), 'space').setScale(2)
 
-    this.add.text(400, 200, 'A quick maths game\n\n< play >', {
+    this.add.text(eng.x(), eng.y(0.3), 'Cargo and go!\n\n< play >', {
       align: 'center',
       fill: 'white',
       fontFamily: 'sans-serif',
       fontSize: 48,
-    })
-      .setOrigin(0.5, 0)
+    }).setOrigin(0.5, 0)
 
     this.input.on('pointerdown', function () {
       this.scene.switch('play')

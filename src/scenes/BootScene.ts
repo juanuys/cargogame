@@ -1,6 +1,7 @@
 import Phaser from 'phaser'
 // @ts-ignore
 import images from '../assets/*.png'
+import eng from "../engine/geom"
 
 export default class BootScene extends Phaser.Scene {
   constructor () {
@@ -8,7 +9,7 @@ export default class BootScene extends Phaser.Scene {
   }
 
   preload () {
-    const bg = this.add.rectangle(400, 300, 400, 30, 0x666666)
+    const bg = this.add.rectangle(eng.x(), eng.y(), eng.w(0.5), eng.h(0.05), 0x666666)
     const bar = this.add.rectangle(bg.x, bg.y, bg.width, bg.height, 0xffffff).setScale(0, 1)
 
     console.table(images)

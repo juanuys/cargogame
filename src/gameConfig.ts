@@ -6,9 +6,9 @@ import EndScene from './scenes/EndScene';
 
 export default {
   type: Phaser.AUTO,
-  width: 800,
-  height: 600,
-  title: 'Quick maths game',
+  width: 1024,
+  height: 768,
+  title: 'Cargo and go!',
   url: 'https://github.com/opyate/cargogame',
   banner: { text: 'white', background: ['#FD7400', '#FFE11A', '#BEDB39', '#1F8A70', '#004358'] },
   scene: [BootScene, MenuScene, PlayScene, EndScene]

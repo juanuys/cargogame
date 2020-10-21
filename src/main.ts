@@ -1,3 +1,4 @@
+import "./seed"
 import Phaser from 'phaser'
 import gameConfig from './gameConfig'
 
