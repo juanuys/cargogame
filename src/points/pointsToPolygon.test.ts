@@ -1,4 +1,4 @@
-import {expect, test} from "@jest/globals"
+import {describe, expect, test} from "@jest/globals"
 import sortPoints from "./pointsToPolygon"
 import {IPoint} from "../polys/model";
 
@@ -27,18 +27,37 @@ import {IPoint} from "../polys/model";
  *    +-------------> x
  *   0    5      10
  */
-test('sortPoints', () => {
-    const points: IPoint[] = [
-        { x: 5, y: 5 },
-        { x: 5, y: 10 },
-        { x: 10, y: 5 },
-        { x: 10, y: 10 },
-    ]
+describe('sortPoints', () => {
+    test('variety1', () => {
+        const points: IPoint[] = [
+            { x: 5, y: 5 },
+            { x: 5, y: 10 },
+            { x: 10, y: 5 },
+            { x: 10, y: 10 },
+        ]
 
-    expect(sortPoints(points)).toStrictEqual([
-        { x: 10, y: 5 },
-        { x: 5, y: 5 },
-        { x: 5, y: 10 },
-        { x: 10, y: 10 },
-    ])
+        expect(sortPoints(points)).toStrictEqual([
+            { x: 10, y: 5 },
+            { x: 5, y: 5 },
+            { x: 5, y: 10 },
+            { x: 10, y: 10 },
+        ])
+    })
+
+    test('variety2', () => {
+        const points: IPoint[] = [
+            { x: 5, y: 5 },
+            { x: 5, y: 10 },
+            { x: 10, y: 5 },
+            { x: 10, y: 10 },
+        ]
+
+        expect(sortPoints(points)).toStrictEqual([
+            { x: 10, y: 5 },
+            { x: 5, y: 5 },
+            { x: 5, y: 10 },
+            { x: 10, y: 10 },
+        ])
+    })
 })
+

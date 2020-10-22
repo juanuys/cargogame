@@ -7,6 +7,7 @@ dist:
 	npm run dist
 
 run:
+	rm -rf dist/
 	npm run start
 
 test:

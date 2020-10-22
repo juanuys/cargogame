@@ -1,6 +1,7 @@
 import Phaser from 'phaser'
 import {IPoint, ITiles} from "../polys/model"
 import makeTile from "../polys/tiling"
+import {normalise} from "../polys/solution"
 import eng from "../engine/geom"
 import ColorObject = Phaser.Types.Display.ColorObject
 import {clean} from "../points"
@@ -53,6 +54,7 @@ export default class PlayScene extends Phaser.Scene {
     const hsv = Phaser.Display.Color.HSVColorWheel()
 
     this.tiles.polys.filter((p) => p.isUsed).forEach((polyGroup, polyIndex) => {
+      const spriteIndex = polyIndex >= 9 ? 1 : polyIndex + 1
       const polyPoints = polyGroup.orientations[0]
 
       // A poly's Xs might be mostly positive or negative, so shift
@@ -73,31 +75,6 @@ export default class PlayScene extends Phaser.Scene {
 
       const polyContainer = this.add.container(polyContainerX, polyContainerY)
 
-      // from the basic points, get all polygon points in a really inefficient way
-      // as we'll clean it afterwards.
-      const hitAreaPoints = polyPoints.reduce((acc, point: IPoint) => {
-        const shiftedX = point.x * rw
-        const shiftedY = point.y * rw
-        const shift = rw / 2
-
-        return acc.concat([
-          { x: shiftedX + shift, y: shiftedY + shift, },
-          { x: shiftedX + shift, y: shiftedY - shift, },
-          { x: shiftedX - shift, y: shiftedY + shift, },
-          { x: shiftedX - shift, y: shiftedY - shift, },
-        ])
-      }, [])
-
-      const cleanHitAreaPoints = clean(hitAreaPoints)
-
-      const phaserHitAreaPoints = cleanHitAreaPoints.map((point) => new Phaser.Geom.Point(point.x, point.y))
-      console.log(phaserHitAreaPoints)
-      // const hitArea = new Phaser.Geom.Polygon(phaserHitAreaPoints)
-      // const hitAreaPolygon = this.add.polygon(hitArea.points[0].x, hitArea.points[0].y, phaserHitAreaPoints, 0x3f775f)
-      // polyContainer.add(hitAreaPolygon)
-      // polyContainer.setInteractive({ draggable: true, hitArea })
-      // this.input.setDraggable(polyContainer)
-
       this.polyominoPolygons.push({
         polyContainer: polyContainer,
         origCoords: {
@@ -107,12 +84,24 @@ export default class PlayScene extends Phaser.Scene {
       })
 
       // for each polyomino point, create a rectangle, and add it to the poly container
-      let fillColour = hsv[polyIndex * 10].color
-      polyPoints.forEach((point) => {
-        const rect = this.add.rectangle(point.x * rw, point.y * rw, rw, rw, fillColour)
-        polyContainer.add(rect)
+      const containerSize = {
+        w: rw,
+        h: rw,
+      }
+      polyPoints.forEach((point, idx) => {
+        const sprite = this.add.sprite(point.x * rw, point.y * rw, 'spritesheet', `tiles/c${spriteIndex}.png`).setSize(rw, rw).setDisplaySize(rw, rw)
+        polyContainer.add(sprite)
+
+        containerSize.w = Math.max(containerSize.w, point.x * rw)
+        containerSize.h = Math.max(containerSize.h, point.y * rw)
       })
-    })
+
+      // polyContainer.setInteractive(new Phaser.Geom.Circle(0, 0, rw), Phaser.Geom.Circle.Contains)
+      polyContainer.setSize(containerSize.w, containerSize.h)
+      polyContainer.setInteractive()
+      this.input.setDraggable(polyContainer)
+
+    }) // END forEach
 
   }
 

@@ -2,6 +2,7 @@ import Phaser from 'phaser'
 // @ts-ignore
 import images from '../assets/*.png'
 import eng from "../engine/geom"
+import spritesheetJson from "../assets/spritesheet.json"
 
 export default class BootScene extends Phaser.Scene {
   constructor () {
@@ -16,6 +17,9 @@ export default class BootScene extends Phaser.Scene {
 
     this.load.image('space', images.space)
     this.load.image('red', images.red)
+    spritesheetJson.textures[0].image = images.spritesheet.substring(1)
+    this.load.multiatlas('spritesheet', spritesheetJson)
+    console.log(spritesheetJson)
 
     this.load.on('progress', function (progress) {
       bar.setScale(progress, 1)

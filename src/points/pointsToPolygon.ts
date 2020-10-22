@@ -5,10 +5,11 @@ import {IPoint} from "../polys/model";
  *
  * See http://geomalgorithms.com/a10-_hull-1.html
  *
+ * Note: This ends up not working to well for polyominoes that want to be polygons.
+ *
  * @param points
  */
 export default function sortPoints(points) {
-    points = points.splice(0)
     const p0: IPoint = {
         x: -1,
         y: -1
