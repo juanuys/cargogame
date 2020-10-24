@@ -1,4 +1,6 @@
-import {IPoint} from "../polys/model";
+import {IPoint} from "../polys/model"
+import {polygon} from 'polygon-tools'
+import howManyPointsInCommon from "./similarity"
 
 /**
  * Accepts an array of polyomino points, and converts it to polygon points.
@@ -47,26 +49,69 @@ import {IPoint} from "../polys/model";
  * @param width
  */
 export default function convert(polyomino: IPoint[], width: number): IPoint[] {
+    const pointsToRects = polyomino.reduce((acc, point: IPoint) => {
+        const x = point.x * width
+        const y = point.y * width
 
-    // TODO fix this rubbish...
-
-    const lookup = polyomino.reduce((acc, point) => {
-        let key = `${point.x}-${point.y}`;
-        return Object.assign(acc, {
-            [key]: point,
-        })
-    }, {})
-
-    return polyomino.reduce((acc, point: IPoint) => {
-        const shiftedX = point.x * width
-        const shiftedY = point.y * width
-        const shift = width / 2
-
-        return acc.concat([
-            { x: shiftedX + shift, y: shiftedY + shift, },
-            { x: shiftedX + shift, y: shiftedY - shift, },
-            { x: shiftedX - shift, y: shiftedY + shift, },
-            { x: shiftedX - shift, y: shiftedY - shift, },
+        acc.push([
+            [x, y],
+            [x + width, y],
+            [x + width, y + width],
+            [x, y + width],
         ])
+        return acc
     }, [])
+
+
+    return arrOfRectsToPolygon(pointsToRects)
+}
+
+/**
+ * Accepts this shape:
+ * [
+ *      [
+ *          [0,0],
+ *          [10,10]
+ *      ],
+ *      [
+ *          [20,10],
+ *          [30,20]
+ *      ]
+ * ]
+ *
+ * @param pointsToRects
+ */
+function arrOfRectsToPolygon(pointsToRects) {
+
+    const base = {
+        remainder: [],
+        union: pointsToRects[0]
+    }
+
+    const result = pointsToRects.splice(1).reduce((acc, val, idx) => {
+        // if the poly doesn't have at least 2 points in common with the acc,
+        // then move it to the end of the remainder for later processing
+        if (howManyPointsInCommon(acc.union, val) < 2) {
+            return {
+                remainder: acc.remainder.concat(val),
+                union: acc.union
+            }
+        } else {
+            return {
+                remainder: acc.remainder,
+                union: polygon.union(acc.union, val)[0]
+            }
+        }
+    }, base)
+
+    if (result.remainder.length === 0) {
+        // nothing left to process
+        return result.union
+    } else {
+        const unionAndRemainder = [
+            result.union,
+            result.remainder
+        ]
+        return arrOfRectsToPolygon(unionAndRemainder)
+    }
 }

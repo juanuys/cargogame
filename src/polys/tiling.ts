@@ -1,10 +1,9 @@
 // import "../seed" // import before everything else
 
-import {Polyomino, OneSidedPolyomino} from "polyomino"
+import {OneSidedPolyomino, Polyomino} from "polyomino"
 import {Set} from "immutable"
-import {ITiles, IGroupedPolyominoes, IPoint} from "./model"
-import * as _ from "lodash"
-import {PolySolution, createPolyominoOrientations, normalise} from "./solution"
+import {IGroupedPolyominoes, ITiles} from "./model"
+import {createPolyominoOrientations, PolySolution} from "./solution"
 
 /**
  * Given a width and height, return a tile-able rectangle, and an array of

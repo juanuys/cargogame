@@ -4,7 +4,8 @@ import makeTile from "../polys/tiling"
 import {normalise} from "../polys/solution"
 import eng from "../engine/geom"
 import ColorObject = Phaser.Types.Display.ColorObject
-import {clean} from "../points"
+import {polyominoToPolygon} from "../points"
+import {polygon} from 'polygon-tools'
 
 interface IPolyPoly {
   polyContainer: Phaser.GameObjects.Container
@@ -17,6 +18,8 @@ interface IPolyPoly {
 export default class PlayScene extends Phaser.Scene {
   tiles: ITiles
   polyominoPolygons: IPolyPoly[]
+  rectWidth: number
+  halfRectWidth: number
 
   constructor () {
     super({
@@ -31,18 +34,22 @@ export default class PlayScene extends Phaser.Scene {
 
     this.tiles = makeTile(6, 10)
     this.polyominoPolygons = []
+    this.rectWidth = 40
+    this.halfRectWidth = this.rectWidth / 2
   }
 
   getBoard() {
-    const board = this.add.container(eng.x(0.2), eng.y(0.2))
-    const rw = 50
+    const board = this.add.container(eng.x(0.5), eng.y(0.5))
+    const numRows = this.tiles.board.length
     this.tiles.board.forEach((row, colIndex) => {
+      const numCols = row.length
       row.forEach((point, rowIndex) => {
         let fillColour = 0x5f33ff
         if ((colIndex + rowIndex) % 2 === 0) {
           fillColour = 0x5f44ff
         }
-        const rect = this.add.rectangle(rowIndex * rw, colIndex * rw, rw, rw, fillColour)
+        // console.log((numRows / 2), ((numRows / 2) - rowIndex) * this.rectWidth)
+        const rect = this.add.rectangle(((numCols / 2) - rowIndex) * this.rectWidth - this.rectWidth / 2, ((numRows / 2) - colIndex) * this.rectWidth - this.rectWidth / 2, this.rectWidth, this.rectWidth, fillColour)
         board.add(rect)
       })
     })
@@ -50,12 +57,16 @@ export default class PlayScene extends Phaser.Scene {
 
   getPolyominoes() {
     // const pieces = this.add.container(eng.x(0.2), eng.y(0.6))
-    const rw = 25
-    const hsv = Phaser.Display.Color.HSVColorWheel()
 
-    this.tiles.polys.filter((p) => p.isUsed).forEach((polyGroup, polyIndex) => {
+    let usedPolys = this.tiles.polys.filter((p) => p.isUsed);
+    const numberOfPolys = usedPolys.length
+
+    usedPolys.forEach((polyGroup, polyIndex) => {
+      // if (polyIndex !== 2) {
+      //   return
+      // }
       const spriteIndex = polyIndex >= 9 ? 1 : polyIndex + 1
-      const polyPoints = polyGroup.orientations[0]
+      const polyPoints = normalise(polyGroup.orientations[0])
 
       // A poly's Xs might be mostly positive or negative, so shift
       // it the other way when we draw them.
@@ -63,14 +74,19 @@ export default class PlayScene extends Phaser.Scene {
         return acc + val.x
       }, 0)
 
-      let containerX = 0.10 * (polyIndex + 1) + (0.005 * -xShift)
-      let containerY = 0.72
-      if (containerX > 0.8) {
-        containerX -= 0.8
-        containerY = 0.85
+      // polymino container positioning
+      const xShiftWidth = eng.w() / (numberOfPolys / 2)
+      let containerX
+      let containerY = 0.08
+      const spacingFactor = 0.8
+      if (polyIndex < numberOfPolys / 2) {
+        containerX = xShiftWidth * polyIndex * spacingFactor + (0.005 * -xShift) + xShiftWidth / 2
+      } else {
+        containerX = xShiftWidth * (polyIndex - numberOfPolys / 2) * spacingFactor + (0.005 * -xShift) + xShiftWidth / 2
+        containerY = 0.78
       }
 
-      let polyContainerX = eng.x(containerX)
+      let polyContainerX = containerX
       let polyContainerY = eng.y(containerY)
 
       const polyContainer = this.add.container(polyContainerX, polyContainerY)
@@ -84,20 +100,20 @@ export default class PlayScene extends Phaser.Scene {
       })
 
       // for each polyomino point, create a rectangle, and add it to the poly container
-      const containerSize = {
-        w: rw,
-        h: rw,
-      }
       polyPoints.forEach((point, idx) => {
-        const sprite = this.add.sprite(point.x * rw, point.y * rw, 'spritesheet', `tiles/c${spriteIndex}.png`).setSize(rw, rw).setDisplaySize(rw, rw)
+        const spriteX = point.x * this.rectWidth;
+        const spriteY = point.y * this.rectWidth;
+        const sprite = this.add.sprite(spriteX, spriteY, 'spritesheet', `tiles/c${spriteIndex}.png`).setSize(this.rectWidth, this.rectWidth).setDisplaySize(this.rectWidth, this.rectWidth)
         polyContainer.add(sprite)
-
-        containerSize.w = Math.max(containerSize.w, point.x * rw)
-        containerSize.h = Math.max(containerSize.h, point.y * rw)
       })
 
-      // polyContainer.setInteractive(new Phaser.Geom.Circle(0, 0, rw), Phaser.Geom.Circle.Contains)
-      polyContainer.setSize(containerSize.w, containerSize.h)
+      const hitAreaPolygons = polyominoToPolygon(polyPoints, this.rectWidth)
+      const phaserHitAreaPolygons = hitAreaPolygons.map((point) => new Phaser.Geom.Point(point[0], point[1]))
+      polyContainer.setInteractive(new Phaser.Geom.Polygon(phaserHitAreaPolygons), Phaser.Geom.Polygon.Contains)
+
+      // var debugRect = this.add.polygon(0, 0, hitAreaPolygons,  0xffff00, 0.5)
+      // polyContainer.add(debugRect)
+
       polyContainer.setInteractive()
       this.input.setDraggable(polyContainer)
 
@@ -106,6 +122,7 @@ export default class PlayScene extends Phaser.Scene {
   }
 
   create () {
+
     // background
     this.add.image(eng.x(), eng.y(), 'space').setScale(2)
 
@@ -129,9 +146,12 @@ export default class PlayScene extends Phaser.Scene {
     // })
 
     this.input.on('drag', function (pointer, gameObject, dragX, dragY) {
-      gameObject.x = dragX
-      gameObject.y = dragY
-    })
+      // round position to this.rectWidth / 2 pixels
+      const x = Math.round(dragX / this.halfRectWidth) * this.halfRectWidth
+      const y = Math.round(dragY / this.halfRectWidth) * this.halfRectWidth
+
+      gameObject.setPosition(x, y)
+    }, this)
 
     this.input.keyboard
       .on('keydown-R', function () {

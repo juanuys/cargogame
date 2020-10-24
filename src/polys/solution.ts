@@ -9,26 +9,28 @@ import {IGroupedPolyominoes} from "./model";
  * @param polyomino
  */
 export function normalise(polyomino) {
-	const polyominoLength = polyomino.length
+	const polyominoCopy = JSON.parse(JSON.stringify(polyomino))
+	const polyominoLength = polyominoCopy.length
 
 	// sort by y, then x
 	for (let i = 0 ; i < (polyominoLength-1); i++) {
 		for (let j = i+1; j < polyominoLength; j++) {
-			if ( (polyomino[i].y > polyomino[j].y) ||
-				(polyomino[i].y == polyomino[j].y  && polyomino[i].x > polyomino[j].x)) {
+			if ( (polyominoCopy[i].y > polyominoCopy[j].y) ||
+				(polyominoCopy[i].y == polyominoCopy[j].y  && polyominoCopy[i].x > polyominoCopy[j].x)) {
 				//swap
-				[polyomino[i], polyomino[j]] = [polyomino[j], polyomino[i]]
+				[polyominoCopy[i], polyominoCopy[j]] = [polyominoCopy[j], polyominoCopy[i]]
 			}
 		}
 	}
 
 	// Set first cell as (0,0)
-	const shiftX = -polyomino[0].x
-	const shiftY = -polyomino[0].y
+	const shiftX = -polyominoCopy[0].x
+	const shiftY = -polyominoCopy[0].y
 	for (let i = 0; i < polyominoLength; i++) {
-		polyomino[i].x += shiftX
-		polyomino[i].y += shiftY
+		polyominoCopy[i].x += shiftX
+		polyominoCopy[i].y += shiftY
 	}
+	return polyominoCopy
 }
 
 /**
@@ -44,8 +46,7 @@ function addRotations(orientations, polyomino) {
 		for (let j = 0 ; j < polyomino.length; j++) {
 			[polyomino[j].y, polyomino[j].x] = [polyomino[j].x, -polyomino[j].y]
 		}
-		normalise(polyomino)
-		if (!addPolyominoOrientation(orientations,polyomino)) break
+		if (!addPolyominoOrientation(orientations,normalise(polyomino))) break
 	}
 }
 
@@ -95,10 +96,10 @@ export function createPolyominoOrientations(groupedPolyominoes) {
 		// add flipped
 		const polyFlipped = JSON.parse(JSON.stringify(polyomino))
 		polyFlipped.forEach((point) => point.x = -point.x)
-		normalise(polyFlipped)
-		if (addPolyominoOrientation(groupedPolyominoes[g].orientations, polyFlipped)) {
+		const normalisedPolyFlipped = normalise(polyFlipped)
+		if (addPolyominoOrientation(groupedPolyominoes[g].orientations, normalisedPolyFlipped)) {
 			groupedPolyominoes[g].isFlipped = true
-			addRotations(groupedPolyominoes[g].orientations, polyFlipped)
+			addRotations(groupedPolyominoes[g].orientations, normalisedPolyFlipped)
 		}
 	}
 }
