@@ -13,13 +13,10 @@ export default class BootScene extends Phaser.Scene {
     const bg = this.add.rectangle(eng.x(), eng.y(), eng.w(0.5), eng.h(0.05), 0x666666)
     const bar = this.add.rectangle(bg.x, bg.y, bg.width, bg.height, 0xffffff).setScale(0, 1)
 
-    console.table(images)
-
     this.load.image('space', images.space)
     this.load.image('red', images.red)
     spritesheetJson.textures[0].image = images.spritesheet.substring(1)
     this.load.multiatlas('spritesheet', spritesheetJson)
-    console.log(spritesheetJson)
 
     this.load.on('progress', function (progress) {
       bar.setScale(progress, 1)

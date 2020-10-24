@@ -46,18 +46,14 @@ export default function makeTile(width: number, height: number): ITiles {
     if (width < 3) width = 3
     if (height < 3) height = 3
 
-    // console.log("board x", board.length, "y", board[0].length)
-    // console.log("board", board)
-
-
     // establish which polyominos will work best with this board size
-    const order = Math.max(width, height)
+    const order = Math.min(width, height)
     // start at 2, as 1 is just a "mono"
     // const allPolys =_.range(2, order + 1).reduce((acc, val) => {
     //     return acc.concat(OneSidedPolyomino.get(val).toJS())
     // }, [])
 
-    const allPolys = OneSidedPolyomino.get(5).toJS()
+    const allPolys = OneSidedPolyomino.get(order - 1).toJS()
 
     // convert to groupedPolyominoes format
     const groupedPolyominoes: IGroupedPolyominoes[] = asGroupedPolyominoes(allPolys)

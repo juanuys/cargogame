@@ -9,19 +9,9 @@ import {IGroupedPolyominoes} from "./model";
  * @param polyomino
  */
 export function normalise(polyomino) {
-	const polyominoCopy = JSON.parse(JSON.stringify(polyomino))
-	const polyominoLength = polyominoCopy.length
-
 	// sort by y, then x
-	for (let i = 0 ; i < (polyominoLength-1); i++) {
-		for (let j = i+1; j < polyominoLength; j++) {
-			if ( (polyominoCopy[i].y > polyominoCopy[j].y) ||
-				(polyominoCopy[i].y == polyominoCopy[j].y  && polyominoCopy[i].x > polyominoCopy[j].x)) {
-				//swap
-				[polyominoCopy[i], polyominoCopy[j]] = [polyominoCopy[j], polyominoCopy[i]]
-			}
-		}
-	}
+	const polyominoCopy = polyomino.sort((a, b) => { return a.y==b.y ? a.x - b.x : a.y - b.y })
+	const polyominoLength = polyominoCopy.length
 
 	// Set first cell as (0,0)
 	const shiftX = -polyominoCopy[0].x
@@ -104,7 +94,7 @@ export function createPolyominoOrientations(groupedPolyominoes) {
 	}
 }
 
-function insertPolyominoIntoBoard(board, boardX, boardY, polyomino, currentPosition, value): boolean {
+function insertPolyominoIntoBoard(board, boardWidth, boardHeight, polyomino, currentPosition, value): boolean {
 	const polyominoLength = polyomino.length
 
 	// try to insert the polyomino
@@ -112,10 +102,10 @@ function insertPolyominoIntoBoard(board, boardX, boardY, polyomino, currentPosit
 	for (i = 0 ; i < polyominoLength; i++) {
 		cx = polyomino[i].x + currentPosition.x
 		cy = polyomino[i].y + currentPosition.y
-		// polyomino point needs to fit into x:[1..boardX], y:[1..boardY]
-		if (cx > boardX || cx < 1) break
-		if (cy > boardY || cy < 1) break
-		if (board[cx][cy] != 0) break
+		// polyomino point needs to fit into x:[1..boardWidth], y:[1..boardHeight]
+		if (cx > boardWidth || cx < 1) break
+		if (cy > boardHeight || cy < 1) break
+		if (board[cy][cx] != 0) break
 	}
 
 	// can't be inserted
@@ -125,7 +115,7 @@ function insertPolyominoIntoBoard(board, boardX, boardY, polyomino, currentPosit
 	for (i = 0 ; i < polyominoLength; i++) {
 		cx = polyomino[i].x + currentPosition.x
 		cy = polyomino[i].y + currentPosition.y
-		board[cx][cy] = value
+		board[cy][cx] = value
 	}
 
 	return true
@@ -135,7 +125,7 @@ function removePolyominoFromBoard(board, polyomino, insertionPosition) {
 	for (let i = 0; i < polyomino.length; i++) {
 		const x = polyomino[i].x+insertionPosition.x;
 		const y = polyomino[i].y+insertionPosition.y;
-		board[x][y] = 0
+		board[y][x] = 0
 	}
 }
 
@@ -150,16 +140,16 @@ function shuffleGroupedPolyominoes(polyominoes) {
 export class PolySolution {
 
 	board: number[][]
-	boardX: number
-	boardY: number
+	boardWidth: number
+	boardHeight: number
 	foundSolution: boolean
 	groupedPolyominoes: IGroupedPolyominoes[]
 	usedPolyominoCount: number
 
 	constructor(width: number, height: number, groupedPolyominoes: IGroupedPolyominoes[], randomise: boolean) {
 		this.board = this.initialiseBoard(width, height)
-		this.boardX = width
-		this.boardY = height
+		this.boardWidth = width
+		this.boardHeight = height
 		this.foundSolution = false
 		this.groupedPolyominoes = groupedPolyominoes
 		this.usedPolyominoCount = 0
@@ -172,9 +162,11 @@ export class PolySolution {
 	initialiseBoard(width: number, height: number): number[][] {
 		// initialise the board
 		const board = []
-		for (let i: number = 0; i < width+2; i++) {
+		// board.length is always the height
+		for (let i: number = 0; i < height+2; i++) {
+			// board[0].length is always the width
 			board[i] = []
-			for (let j: number = 0; j < height+2; j++) {
+			for (let j: number = 0; j < width+2; j++) {
 				board[i][j] = 0
 			}
 		}
@@ -208,9 +200,9 @@ export class PolySolution {
 	findEmptyPosition(startPosition) {
         let x = startPosition.x
 
-		for (let y = startPosition.y; y <= this.boardY; y++) {
-			for (; x <= this.boardX; x++) {
-				if (this.board[x][y] == 0) {
+		for (let y = startPosition.y; y <= this.boardHeight; y++) {
+			for (; x <= this.boardWidth; x++) {
+				if (this.board[y][x] == 0) {
 					return { x, y }
 				}
 			}
@@ -237,7 +229,7 @@ export class PolySolution {
 		do {
 			let numberOfOrientations = this.groupedPolyominoes[currentIndex].orientations.length
 			for (let i=0; i < numberOfOrientations && !this.foundSolution; i++) {
-				if (insertPolyominoIntoBoard(this.board, this.boardX, this.boardY, this.groupedPolyominoes[currentIndex].orientations[i], currentPosition, currentIndex+1)) {
+				if (insertPolyominoIntoBoard(this.board, this.boardWidth, this.boardHeight, this.groupedPolyominoes[currentIndex].orientations[i], currentPosition, currentIndex+1)) {
 					this.groupedPolyominoes[currentIndex].isUsed = true
 
 					// gameplay hints
