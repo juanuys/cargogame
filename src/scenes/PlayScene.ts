@@ -160,6 +160,10 @@ export default class PlayScene extends Phaser.Scene {
     }
 
     create() {
+        const music = this.sound.add('level')
+        music.loop = true
+        music.play()
+
         // for some reason 5,8 doesn't come back with enough pieces...
         // this.tiles = makeTile(5, 8)
         this.tiles = makeTile(10, 6)
@@ -199,9 +203,13 @@ export default class PlayScene extends Phaser.Scene {
                 }, acc)
             }, {x: 0, y: 0})
             if (sum.x % this.rectWidth == 0 && sum.y % this.rectWidth == 0) {
+                // winner!
                 const transitionOut = function (progress) {
                     this.background.scale = 1 + 4 * progress
                     this.background.setAngle(90 * progress)
+                    if (progress > 0.9) {
+                        music.stop()
+                    }
                 }
                 this.scene.transition({
                     target: 'win',
@@ -215,21 +223,24 @@ export default class PlayScene extends Phaser.Scene {
             }
         }, this)
 
-        // // uncomment to test transition:
-        // this.input.on('pointerdown', function(pointer) {
-        //     const transitionOut = function (progress) {
-        //         this.background.scale = 1 + 4 * progress
-        //         this.background.setAngle(90 * progress)
-        //     }
-        //     this.scene.transition({
-        //         target: 'win',
-        //         duration: 1000,
-        //         moveBelow: true,
-        //         onUpdate: transitionOut,
-        //         data: { x: eng.x(), y: eng.y() }
-        //     })
-        //
-        // }, this)
+        // uncomment to test transition:
+        this.input.on('pointerdown', function(pointer) {
+            const transitionOut = function (progress) {
+                this.background.scale = 1 + 4 * progress
+                this.background.setAngle(90 * progress)
+                if (progress > 0.9) {
+                    music.stop()
+                }
+            }
+            this.scene.transition({
+                target: 'win',
+                duration: 1000,
+                moveBelow: true,
+                onUpdate: transitionOut,
+                data: { x: eng.x(), y: eng.y() }
+            })
+
+        }, this)
 
         this.input.keyboard
             .on('keydown-R', function () {
