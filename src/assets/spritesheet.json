@@ -1,14 +1,77 @@
 {
 	"textures": [
 		{
-			"image": "spritesheet.png",
+			"image": "spritesheet-0.png",
 			"format": "RGBA8888",
 			"size": {
-				"w": 390,
-				"h": 390
+				"w": 1282,
+				"h": 1864
 			},
 			"scale": 1,
 			"frames": [
+				{
+					"filename": "backgrounds/ship.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 1280,
+						"h": 800
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 1280,
+						"h": 800
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 1280,
+						"h": 800
+					}
+				},
+				{
+					"filename": "backgrounds/splash-sans-ship.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 1280,
+						"h": 800
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 1280,
+						"h": 800
+					},
+					"frame": {
+						"x": 1,
+						"y": 803,
+						"w": 1280,
+						"h": 800
+					}
+				},
+				{
+					"filename": "props/ship.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 494,
+						"h": 256
+					},
+					"spriteSourceSize": {
+						"x": 4,
+						"y": 3,
+						"w": 485,
+						"h": 251
+					},
+					"frame": {
+						"x": 1,
+						"y": 1605,
+						"w": 485,
+						"h": 251
+					}
+				},
 				{
 					"filename": "tiles/c1.png",
 					"rotated": false,
@@ -24,8 +87,8 @@
 						"h": 128
 					},
 					"frame": {
-						"x": 1,
-						"y": 1,
+						"x": 488,
+						"y": 1605,
 						"w": 128,
 						"h": 128
 					}
@@ -45,8 +108,8 @@
 						"h": 128
 					},
 					"frame": {
-						"x": 1,
-						"y": 131,
+						"x": 488,
+						"y": 1735,
 						"w": 128,
 						"h": 128
 					}
@@ -66,8 +129,8 @@
 						"h": 128
 					},
 					"frame": {
-						"x": 1,
-						"y": 261,
+						"x": 618,
+						"y": 1605,
 						"w": 128,
 						"h": 128
 					}
@@ -87,8 +150,8 @@
 						"h": 128
 					},
 					"frame": {
-						"x": 131,
-						"y": 1,
+						"x": 618,
+						"y": 1735,
 						"w": 128,
 						"h": 128
 					}
@@ -108,8 +171,8 @@
 						"h": 128
 					},
 					"frame": {
-						"x": 261,
-						"y": 1,
+						"x": 748,
+						"y": 1605,
 						"w": 128,
 						"h": 128
 					}
@@ -129,8 +192,8 @@
 						"h": 128
 					},
 					"frame": {
-						"x": 131,
-						"y": 131,
+						"x": 748,
+						"y": 1735,
 						"w": 128,
 						"h": 128
 					}
@@ -150,8 +213,8 @@
 						"h": 128
 					},
 					"frame": {
-						"x": 131,
-						"y": 261,
+						"x": 878,
+						"y": 1605,
 						"w": 128,
 						"h": 128
 					}
@@ -171,8 +234,8 @@
 						"h": 128
 					},
 					"frame": {
-						"x": 261,
-						"y": 131,
+						"x": 878,
+						"y": 1735,
 						"w": 128,
 						"h": 128
 					}
@@ -192,10 +255,63 @@
 						"h": 128
 					},
 					"frame": {
-						"x": 261,
-						"y": 261,
+						"x": 1008,
+						"y": 1605,
 						"w": 128,
 						"h": 128
+					}
+				}
+			]
+		},
+		{
+			"image": "spritesheet-1.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 1282,
+				"h": 1604
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "backgrounds/splash.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 1280,
+						"h": 800
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 1280,
+						"h": 800
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 1280,
+						"h": 800
+					}
+				},
+				{
+					"filename": "backgrounds/win.png",
+					"rotated": false,
+					"trimmed": false,
+					"sourceSize": {
+						"w": 1280,
+						"h": 800
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 1280,
+						"h": 800
+					},
+					"frame": {
+						"x": 1,
+						"y": 803,
+						"w": 1280,
+						"h": 800
 					}
 				}
 			]
@@ -204,6 +320,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:a6b478a9beff9387909bcd026e55305d:97ca4fb1cf9c97f4a25480ae8c70afea:729adc6043343cfda41c447ce8f464d6$"
+		"smartupdate": "$TexturePacker:SmartUpdate:19837af70bcfe312b89f9c524b9188c8:ebab3af9f809ff41a04380a9cdd650b0:891aeea45958f21e96a4508ee113e1b2$"
 	}
 }

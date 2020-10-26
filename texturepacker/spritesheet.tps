@@ -136,7 +136,7 @@
             </struct>
         </map>
         <key>multiPack</key>
-        <false/>
+        <true/>
         <key>forceIdenticalLayout</key>
         <false/>
         <key>outputFormat</key>
@@ -181,6 +181,39 @@
         </struct>
         <key>individualSpriteSettings</key>
         <map type="IndividualSpriteSettingsMap">
+            <key type="filename">../src/assets/sprites/backgrounds/ship.png</key>
+            <key type="filename">../src/assets/sprites/backgrounds/splash-sans-ship.png</key>
+            <key type="filename">../src/assets/sprites/backgrounds/splash.png</key>
+            <key type="filename">../src/assets/sprites/backgrounds/win.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>320,200,640,400</rect>
+                <key>scale9Paddings</key>
+                <rect>320,200,640,400</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
+            <key type="filename">../src/assets/sprites/props/ship.png</key>
+            <struct type="IndividualSpriteSettings">
+                <key>pivotPoint</key>
+                <point_f>0.5,0.5</point_f>
+                <key>spriteScale</key>
+                <double>1</double>
+                <key>scale9Enabled</key>
+                <false/>
+                <key>scale9Borders</key>
+                <rect>124,64,247,128</rect>
+                <key>scale9Paddings</key>
+                <rect>124,64,247,128</rect>
+                <key>scale9FromFile</key>
+                <false/>
+            </struct>
             <key type="filename">../src/assets/sprites/tiles/c1.png</key>
             <key type="filename">../src/assets/sprites/tiles/c2.png</key>
             <key type="filename">../src/assets/sprites/tiles/c3.png</key>

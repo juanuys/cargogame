@@ -16,7 +16,7 @@ export default function sortPoints(points) {
     }
     p0.y = Math.min(...points.map((p) => p.y))
     p0.x = Math.max(...points.filter((p) => p.y == p0.y).map((p) => p.x))
-    points.sort((a,b) => compareAngle(p0, a, b))
+    points.sort((a, b) => compareAngle(p0, a, b))
     return points
 };
 

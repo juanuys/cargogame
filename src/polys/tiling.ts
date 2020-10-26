@@ -79,7 +79,7 @@ function asGroupedPolyominoes(polys: Set<Polyomino>): IGroupedPolyominoes[] {
         }, [])
 
         return acc.concat({
-            orientations: [ poly ],
+            orientations: [poly],
             isUsed: false,
             isFlipped: false,
             ordering: -1,

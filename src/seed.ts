@@ -1,2 +1,3 @@
 import seedrandom from "seedrandom"
-seedrandom("johnny appleseed", { global: true })
+
+seedrandom("johnny appleseed", {global: true})

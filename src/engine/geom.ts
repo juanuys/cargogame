@@ -58,7 +58,8 @@ function rect(x: number, y: number, width: number, height: number, centered: boo
     return new Phaser.Geom.Rectangle(_x, _y, width, height)
 }
 
-export default { w, h, x, y, rect,
+export default {
+    w, h, x, y, rect,
     randomIntFromInterval(min, max) { // min and max included
         return Math.floor(Math.random() * (max - min + 1) + min)
     },

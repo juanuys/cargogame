@@ -8,7 +8,7 @@ export default function positivise(points: IPoint[], skipAlreadyPositive = false
             x: point.x < acc.x ? point.x : acc.x,
             y: point.y < acc.y ? point.y : acc.y,
         }
-    }, { x: 99999, y: 99999})
+    }, {x: 99999, y: 99999})
 
     const shiftXY = {
         x: smallestXY.x,

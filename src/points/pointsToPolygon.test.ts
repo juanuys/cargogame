@@ -30,33 +30,33 @@ import {IPoint} from "../polys/model";
 describe('sortPoints', () => {
     test('variety1', () => {
         const points: IPoint[] = [
-            { x: 5, y: 5 },
-            { x: 5, y: 10 },
-            { x: 10, y: 5 },
-            { x: 10, y: 10 },
+            {x: 5, y: 5},
+            {x: 5, y: 10},
+            {x: 10, y: 5},
+            {x: 10, y: 10},
         ]
 
         expect(sortPoints(points)).toStrictEqual([
-            { x: 10, y: 5 },
-            { x: 5, y: 5 },
-            { x: 5, y: 10 },
-            { x: 10, y: 10 },
+            {x: 10, y: 5},
+            {x: 5, y: 5},
+            {x: 5, y: 10},
+            {x: 10, y: 10},
         ])
     })
 
     test('variety2', () => {
         const points: IPoint[] = [
-            { x: 5, y: 5 },
-            { x: 5, y: 10 },
-            { x: 10, y: 5 },
-            { x: 10, y: 10 },
+            {x: 5, y: 5},
+            {x: 5, y: 10},
+            {x: 10, y: 5},
+            {x: 10, y: 10},
         ]
 
         expect(sortPoints(points)).toStrictEqual([
-            { x: 10, y: 5 },
-            { x: 5, y: 5 },
-            { x: 5, y: 10 },
-            { x: 10, y: 10 },
+            {x: 10, y: 5},
+            {x: 5, y: 5},
+            {x: 5, y: 10},
+            {x: 10, y: 10},
         ])
     })
 })
