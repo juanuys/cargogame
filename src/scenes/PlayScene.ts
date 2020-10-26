@@ -139,7 +139,7 @@ export default class PlayScene extends Phaser.Scene {
 
             polyContainer.on('pointerdown', function (pointer) {
                 if (pointer.rightButtonDown()) {
-                    polyContainer.setRotation(polyContainer.rotation + Math.PI / 2)
+                    // polyContainer.setRotation(polyContainer.rotation + Math.PI / 2)
                     // TODO don't just rotate the container. Actually use the next orientation from the polyGroup data...
                 } else if (pointer.middleButtonDown()) {
                     const x = polyGroup.position.x * this.rectWidth + this.board.x - this.rectWidth
