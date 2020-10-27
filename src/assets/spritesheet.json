@@ -268,12 +268,12 @@
 			"format": "RGBA8888",
 			"size": {
 				"w": 1282,
-				"h": 1604
+				"h": 802
 			},
 			"scale": 1,
 			"frames": [
 				{
-					"filename": "backgrounds/splash.png",
+					"filename": "backgrounds/win.png",
 					"rotated": false,
 					"trimmed": false,
 					"sourceSize": {
@@ -292,27 +292,6 @@
 						"w": 1280,
 						"h": 800
 					}
-				},
-				{
-					"filename": "backgrounds/win.png",
-					"rotated": false,
-					"trimmed": false,
-					"sourceSize": {
-						"w": 1280,
-						"h": 800
-					},
-					"spriteSourceSize": {
-						"x": 0,
-						"y": 0,
-						"w": 1280,
-						"h": 800
-					},
-					"frame": {
-						"x": 1,
-						"y": 803,
-						"w": 1280,
-						"h": 800
-					}
 				}
 			]
 		}
@@ -320,6 +299,6 @@
 	"meta": {
 		"app": "https://www.codeandweb.com/texturepacker",
 		"version": "3.0",
-		"smartupdate": "$TexturePacker:SmartUpdate:19837af70bcfe312b89f9c524b9188c8:ebab3af9f809ff41a04380a9cdd650b0:891aeea45958f21e96a4508ee113e1b2$"
+		"smartupdate": "$TexturePacker:SmartUpdate:3805841ea13f506bcba9b980ef185d27:26cf216e7c05ed964a06cc6e7597e978:891aeea45958f21e96a4508ee113e1b2$"
 	}
 }

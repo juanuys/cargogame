@@ -242,6 +242,31 @@ export default class PlayScene extends Phaser.Scene {
         //
         // }, this)
 
+        // up up down down left right left right B A
+        const konamiCode = this.input.keyboard.createCombo([ 38, 38, 40, 40, 37, 39, 37, 39, 66, 65  ], { resetOnMatch: true })
+
+        // this.input.keyboard
+        //     .on('keydown', function (event) {
+        //         console.log(event.key)
+        //     }, this)
+
+        this.input.keyboard.on('keycombomatch', function (event) {
+            const transitionOut = function (progress) {
+                this.background.scale = 1 + 4 * progress
+                this.background.setAngle(90 * progress)
+                if (progress > 0.9) {
+                    music.stop()
+                }
+            }
+            this.scene.transition({
+                target: 'win',
+                duration: 1000,
+                moveBelow: true,
+                onUpdate: transitionOut,
+                data: {x: eng.x(), y: eng.y()}
+            })
+        }, this)
+
         this.input.keyboard
             .on('keydown-R', function () {
                 this.scene.restart()

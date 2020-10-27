@@ -183,7 +183,6 @@
         <map type="IndividualSpriteSettingsMap">
             <key type="filename">../src/assets/sprites/backgrounds/ship.png</key>
             <key type="filename">../src/assets/sprites/backgrounds/splash-sans-ship.png</key>
-            <key type="filename">../src/assets/sprites/backgrounds/splash.png</key>
             <key type="filename">../src/assets/sprites/backgrounds/win.png</key>
             <struct type="IndividualSpriteSettings">
                 <key>pivotPoint</key>
