@@ -223,24 +223,24 @@ export default class PlayScene extends Phaser.Scene {
             }
         }, this)
 
-        // uncomment to test transition:
-        this.input.on('pointerdown', function(pointer) {
-            const transitionOut = function (progress) {
-                this.background.scale = 1 + 4 * progress
-                this.background.setAngle(90 * progress)
-                if (progress > 0.9) {
-                    music.stop()
-                }
-            }
-            this.scene.transition({
-                target: 'win',
-                duration: 1000,
-                moveBelow: true,
-                onUpdate: transitionOut,
-                data: { x: eng.x(), y: eng.y() }
-            })
-
-        }, this)
+        // // uncomment to test transition:
+        // this.input.on('pointerdown', function(pointer) {
+        //     const transitionOut = function (progress) {
+        //         this.background.scale = 1 + 4 * progress
+        //         this.background.setAngle(90 * progress)
+        //         if (progress > 0.9) {
+        //             music.stop()
+        //         }
+        //     }
+        //     this.scene.transition({
+        //         target: 'win',
+        //         duration: 1000,
+        //         moveBelow: true,
+        //         onUpdate: transitionOut,
+        //         data: { x: eng.x(), y: eng.y() }
+        //     })
+        //
+        // }, this)
 
         this.input.keyboard
             .on('keydown-R', function () {

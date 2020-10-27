@@ -15,15 +15,15 @@ export default class BootScene extends Phaser.Scene {
         const bg = this.add.rectangle(eng.x(), eng.y(), eng.w(0.5), eng.h(0.05), 0x666666)
         const bar = this.add.rectangle(bg.x, bg.y, bg.width, bg.height, 0xffffff).setScale(0, 1)
 
-        // console.table(images)
+        console.table(images)
         const x = [0, 1]
         x.forEach((i) => {
             let image = images[`spritesheet-${i}`]
-            // console.log(image)
+            console.log("before", image)
             if (image.indexOf('/') !== -1) {
                 image = image.substring(1)
             }
-            // console.log(image)
+            console.log("after", image)
             spritesheetJson.textures[0].image = image
         })
         this.load.multiatlas('spritesheet', spritesheetJson)
