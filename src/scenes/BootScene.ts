@@ -46,7 +46,17 @@ export default class BootScene extends Phaser.Scene {
         })
     }
 
-    update() {
-        this.scene.start('menu')
+    create() {
+        this.add.text(eng.x(), eng.y(0.77), '< click to start >', {
+            align: 'center',
+            fill: 'white',
+            fontFamily: 'sans-serif',
+            fontSize: 48,
+        })
+            .setOrigin(0.5, 0)
+
+        this.input.on('pointerdown', function () {
+            this.scene.start('menu')
+        }, this)
     }
 }
