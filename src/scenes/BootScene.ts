@@ -24,7 +24,7 @@ export default class BootScene extends Phaser.Scene {
                 image = image.substring(1)
             }
             console.log("after", image)
-            spritesheetJson.textures[0].image = image
+            spritesheetJson.textures[i].image = image
         })
         console.log(spritesheetJson)
         this.load.multiatlas('spritesheet', spritesheetJson)
