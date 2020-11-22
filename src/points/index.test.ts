@@ -4,6 +4,7 @@ import {IPoint} from "../polys/model";
 
 
 test('clean', () => {
+    debugger
     const points: IPoint[] = [
         {x: 10, y: 5},
         {x: 5, y: 5},

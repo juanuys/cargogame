@@ -7,7 +7,7 @@ dist:
 	npm run dist
 
 run:
-	rm -rf dist/
+	rm -rf dist/ .cache
 	npm run start
 
 test:
