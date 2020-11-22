@@ -1,4 +1,4 @@
-name: Build and deploy Jekyll site to GitHub Pages
+name: Build and deploy to itch.io
 
 on:
   push:
@@ -22,3 +22,14 @@ jobs:
           node-version: '12'
       - run: npm install
       - run: npm test
+      - run: npm run dist
+      - run: zip -r docs.zip docs
+      - run: npm run version
+      - uses: josephbmanley/butler-publish-itchio-action@master
+        env:
+          BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
+          CHANNEL: web
+          ITCH_GAME: cargo-n-go
+          ITCH_USER: opyate
+          PACKAGE: docs.zip
+          VERSION_FILE: VERSION_FILE

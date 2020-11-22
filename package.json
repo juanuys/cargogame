@@ -1,6 +1,6 @@
 {
   "name": "phaser-parcel",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "A Phaser 3 game template using Parcel bundler",
   "main": "src/index.html",
   "scripts": {
@@ -8,7 +8,8 @@
     "start": "parcel serve src/index.html",
     "clean": "rm -rfv dist && rm -rf .cache",
     "testWatch": "jest --no-cache --watchAll",
-    "test": "jest"
+    "test": "jest",
+    "version": "node version.js"
   },
   "keywords": [
     "phaser",

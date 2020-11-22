@@ -5,6 +5,7 @@ import eng from "../engine/geom"
 import spritesheetJson from "../assets/spritesheet.json"
 import audio from "../assets/audio/*.mp3"
 import winaudio from "../assets/audio/win/*.mp3"
+import package from "../../package.json"
 
 export default class BootScene extends Phaser.Scene {
     constructor() {
@@ -19,11 +20,9 @@ export default class BootScene extends Phaser.Scene {
         const x = [0, 1]
         x.forEach((i) => {
             let image = images[`spritesheet-${i}`]
-            console.log("before", image)
             if (image.indexOf('/') !== -1) {
                 image = image.substring(1)
             }
-            console.log("after", image)
             spritesheetJson.textures[i].image = image
         })
         console.log(spritesheetJson)
@@ -52,6 +51,14 @@ export default class BootScene extends Phaser.Scene {
             fill: 'white',
             fontFamily: 'sans-serif',
             fontSize: 48,
+        })
+            .setOrigin(0.5, 0)
+
+        this.add.text(eng.x(), eng.y(0.66), `v${package.version}`, {
+            align: 'center',
+            fill: 'white',
+            fontFamily: 'sans-serif',
+            fontSize: 20,
         })
             .setOrigin(0.5, 0)
 
