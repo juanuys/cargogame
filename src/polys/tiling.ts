@@ -3,7 +3,9 @@
 import {OneSidedPolyomino, Polyomino} from "polyomino"
 import {Set} from "immutable"
 import {IGroupedPolyominoes, ITiles} from "./model"
-import {createPolyominoOrientations, PolySolution} from "./solution"
+import {createPolyominoOrientations, normalise, PolySolution} from "./solution"
+
+const MIN = 4
 
 /**
  * Given a width and height, return a tile-able rectangle, and an array of
@@ -43,17 +45,17 @@ export default function makeTile(width: number, height: number): ITiles {
     height = Math.floor(height)
 
     // ensure minimum (larger than a "mono")
-    if (width < 3) width = 3
-    if (height < 3) height = 3
+    if (width < MIN) width = MIN
+    if (height < MIN) height = MIN
 
     // establish which polyominos will work best with this board size
-    const order = Math.min(width, height)
+    const order = Math.min(width, height) - 1
     // start at 2, as 1 is just a "mono"
     // const allPolys =_.range(2, order + 1).reduce((acc, val) => {
     //     return acc.concat(OneSidedPolyomino.get(val).toJS())
     // }, [])
 
-    const allPolys = OneSidedPolyomino.get(order - 1).toJS()
+    const allPolys = OneSidedPolyomino.get(order).toJS()
 
     // convert to groupedPolyominoes format
     const groupedPolyominoes: IGroupedPolyominoes[] = asGroupedPolyominoes(allPolys)
@@ -79,7 +81,7 @@ function asGroupedPolyominoes(polys: Set<Polyomino>): IGroupedPolyominoes[] {
         }, [])
 
         return acc.concat({
-            orientations: [poly],
+            orientations: [normalise(poly)],
             isUsed: false,
             isFlipped: false,
             ordering: -1,

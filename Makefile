@@ -11,4 +11,4 @@ run:
 	npm run start
 
 test:
-	npm run test
+	npm run testWatch

@@ -16,7 +16,6 @@ export default class BootScene extends Phaser.Scene {
         const bg = this.add.rectangle(eng.x(), eng.y(), eng.w(0.5), eng.h(0.05), 0x666666)
         const bar = this.add.rectangle(bg.x, bg.y, bg.width, bg.height, 0xffffff).setScale(0, 1)
 
-        console.table(images)
         const x = [0, 1]
         x.forEach((i) => {
             let image = images[`spritesheet-${i}`]
@@ -25,7 +24,6 @@ export default class BootScene extends Phaser.Scene {
             }
             spritesheetJson.textures[i].image = image
         })
-        console.log(spritesheetJson)
         this.load.multiatlas('spritesheet', spritesheetJson)
 
         // audio

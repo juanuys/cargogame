@@ -53,11 +53,18 @@ export default function convert(polyomino: IPoint[], width: number): IPoint[] {
         const x = point.x * width
         const y = point.y * width
 
+        // acc.push([
+        //     [x, y],
+        //     [x + width, y],
+        //     [x + width, y + width],
+        //     [x, y + width],
+        // ])
+        const hw = width / 2
         acc.push([
-            [x, y],
-            [x + width, y],
-            [x + width, y + width],
-            [x, y + width],
+            [x - hw, y - hw],
+            [x + hw, y - hw],
+            [x + hw, y + hw],
+            [x - hw, y + hw],
         ])
         return acc
     }, [])

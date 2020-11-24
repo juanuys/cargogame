@@ -1,6 +1,6 @@
 {
   "name": "phaser-parcel",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A Phaser 3 game template using Parcel bundler",
   "main": "src/index.html",
   "scripts": {

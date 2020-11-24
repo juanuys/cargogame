@@ -7,6 +7,8 @@ import ColorObject = Phaser.Types.Display.ColorObject
 import {polyominoToPolygon} from "../points"
 import {polygon} from 'polygon-tools'
 
+const DEBUG = false
+
 interface IPolyPoly {
     polyContainer: Phaser.GameObjects.Container
     origCoords: {
@@ -24,6 +26,7 @@ export default class PlayScene extends Phaser.Scene {
     board: Phaser.GameObjects.Container
     dragDepth: number = 1
     background: Phaser.GameObjects.Sprite
+
 
     constructor() {
         super({
@@ -74,6 +77,7 @@ export default class PlayScene extends Phaser.Scene {
     }
 
     getPolyominoes() {
+        var graphics: Phaser.GameObjects.Graphics = this.add.graphics()
         let usedPolys = this.tiles.polys.filter((p) => p.isUsed)
         const numberOfPolys = usedPolys.length
 
@@ -127,11 +131,13 @@ export default class PlayScene extends Phaser.Scene {
             })
 
             const hitAreaPolygons = polyominoToPolygon(polyPoints, this.rectWidth)
-            const phaserHitAreaPolygons = hitAreaPolygons.map((point) => new Phaser.Geom.Point(point[0], point[1]))
-            polyContainer.setInteractive(new Phaser.Geom.Polygon(phaserHitAreaPolygons), Phaser.Geom.Polygon.Contains)
-
-            // var debugRect = this.add.polygon(0, 0, hitAreaPolygons,  0xffff00, 0.5)
-            // polyContainer.add(debugRect)
+            const phaserHitAreaPolygons = hitAreaPolygons.map((point) => {
+                const x = point[0]
+                const y = point[1]
+                return new Phaser.Geom.Point(x, y)
+            })
+            const actualPolygon = new Phaser.Geom.Polygon(phaserHitAreaPolygons)
+            polyContainer.setInteractive(actualPolygon, Phaser.Geom.Polygon.Contains)
 
             polyContainer.depth = 0
             polyContainer.setInteractive()
@@ -147,6 +153,25 @@ export default class PlayScene extends Phaser.Scene {
                     polyContainer.setPosition(x, y)
                 }
             }, this)
+
+            if (DEBUG) {
+                // Phaser.Input.Events.Gameobject_pointer
+                polyContainer.on('pointerover', function () {
+                    const newPoints = actualPolygon.points.map((point) => {
+                        return {
+                            x: point.x + polyContainerX,
+                            y: point.y + polyContainerY,
+                        }
+                    })
+
+                    graphics.clear()
+                    graphics.fillStyle(0x00ff00)
+                    graphics.fillPoints(newPoints, true)
+                })
+                polyContainer.on('pointerout', function () {
+                    graphics.clear()
+                })
+            }
 
             // polyContainer.on('dragend', function () {
             //   var msg = polyContainer.list.reduce((acc, val) => {
@@ -178,13 +203,14 @@ export default class PlayScene extends Phaser.Scene {
         this.background = this.add.sprite(eng.x(), eng.y(), 'spritesheet', `backgrounds/ship.png`)
 
         this.getBoard()
-        // console.log("board container", this.board)
         this.getPolyominoes()
 
         this.input.on('drag', function (pointer, gameObject, dragX, dragY) {
             // round position to this.rectWidth / 2 pixels
             const x = Math.round(dragX / this.halfRectWidth) * this.halfRectWidth
             const y = Math.round(dragY / this.halfRectWidth) * this.halfRectWidth
+            // const x = Math.round(dragX / this.rectWidth) * this.rectWidth
+            // const y = Math.round(dragY / this.rectWidth) * this.rectWidth
             gameObject.depth = this.dragDepth++
             gameObject.setPosition(x, y)
         }, this)

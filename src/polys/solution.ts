@@ -32,7 +32,8 @@ export function normalise(polyomino) {
  * @param orientations
  * @param polyomino
  */
-function addRotations(orientations, polyomino) {
+export function addRotations(orientations, polyomino) {
+    addPolyominoOrientation(orientations, normalise(polyomino))
     for (let i = 0; i < 3; i++) {
         // rotate 90 degree clockwise, (X, Y) ==> (-Y, X)
         for (let j = 0; j < polyomino.length; j++) {
