@@ -1,11 +1,9 @@
 import Phaser from 'phaser'
-import {IGroupedPolyominoes, IPoint, ITiles} from "../polys/model"
+import {IGroupedPolyominoes, ITiles} from "../polys/model"
 import makeTile from "../polys/tiling"
-import {normalise} from "../polys/solution"
 import eng from "../engine/geom"
-import ColorObject = Phaser.Types.Display.ColorObject
 import {polyominoToPolygon} from "../points"
-import {polygon} from 'polygon-tools'
+import * as _ from "lodash"
 
 const DEBUG = false
 
@@ -81,6 +79,8 @@ export default class PlayScene extends Phaser.Scene {
         let usedPolys = this.tiles.polys.filter((p) => p.isUsed)
         const numberOfPolys = usedPolys.length
 
+        const rotations = [Math.PI * 1/2, Math.PI * 2/2, Math.PI * 3/2, Math.PI * 4/2]
+
         usedPolys.forEach((polyGroup, polyIndex) => {
             // if (polyIndex !== 2) {
             //   return
@@ -143,14 +143,16 @@ export default class PlayScene extends Phaser.Scene {
             polyContainer.setInteractive()
             this.input.setDraggable(polyContainer)
 
+            // random initial rotation
+            polyContainer.setRotation(polyContainer.rotation + _.sample(rotations))
+
             polyContainer.on('pointerdown', function (pointer) {
                 if (pointer.rightButtonDown()) {
-                    // polyContainer.setRotation(polyContainer.rotation + Math.PI / 2)
-                    // TODO don't just rotate the container. Actually use the next orientation from the polyGroup data...
+                    polyContainer.setRotation(polyContainer.rotation + Math.PI / 2)
                 } else if (pointer.middleButtonDown()) {
-                    const x = polyGroup.position.x * this.rectWidth + this.board.x - this.rectWidth
-                    const y = polyGroup.position.y * this.rectWidth + this.board.y - this.rectWidth
-                    polyContainer.setPosition(x, y)
+                    // const x = polyGroup.position.x * this.rectWidth + this.board.x - this.rectWidth
+                    // const y = polyGroup.position.y * this.rectWidth + this.board.y - this.rectWidth
+                    // polyContainer.setPosition(x, y)
                 }
             }, this)
 
@@ -205,6 +207,13 @@ export default class PlayScene extends Phaser.Scene {
         this.getBoard()
         this.getPolyominoes()
 
+        // calculate board rectangles, for obscurity check when polys are moved
+        const checkerBoardLookup = this.board.list.map((rect: Phaser.Geom.Rectangle) => {
+            const x = this.board.x + rect.x
+            const y = this.board.y + rect.y
+            return `${x}-${y}`
+        }).sort()
+
         this.input.on('drag', function (pointer, gameObject, dragX, dragY) {
             // round position to this.rectWidth / 2 pixels
             const x = Math.round(dragX / this.halfRectWidth) * this.halfRectWidth
@@ -217,18 +226,32 @@ export default class PlayScene extends Phaser.Scene {
 
         this.input.mouse.disableContextMenu()
 
+        let tempMatrix = new Phaser.GameObjects.Components.TransformMatrix()
+        let tempParentMatrix = new Phaser.GameObjects.Components.TransformMatrix()
+
         this.input.on('pointerup', function (pointer) {
 
-            // TODO rotated pieces breaks this, as we're rotating the container
-            const sum = this.polyominoes.reduce((acc, poly) => {
-                return poly.polyContainer.list.reduce((acc, val) => {
-                    return {
-                        x: acc.x + (poly.polyContainer.x + val.x) / this.rectWidth,
-                        y: acc.y + (poly.polyContainer.y + val.y) / this.rectWidth,
+            let cbl: string[] = _.clone(checkerBoardLookup)
+
+            // get the polys' rects' coords and match it with the checkerBoardLookup
+            // by reducing the cbl down
+            this.polyominoes.reduce((acc: string[], poly) => {
+                return poly.polyContainer.list.reduce((acc: string[], val) => {
+                    val.getWorldTransformMatrix(tempMatrix, tempParentMatrix)
+                    const d = tempMatrix.decomposeMatrix()
+                    const x = d.translateX
+                    const y = d.translateY
+
+                    const point = `${x}-${y}`
+                    const index = acc.indexOf(point)
+                    if (index > -1) {
+                        acc.splice(index, 1)
                     }
+                    return acc
                 }, acc)
-            }, {x: 0, y: 0})
-            if (sum.x % this.rectWidth == 0 && sum.y % this.rectWidth == 0) {
+            }, cbl)  // mutates cbl
+
+            if (cbl.length === 0) {
                 // winner!
                 const transitionOut = function (progress) {
                     this.background.scale = 1 + 4 * progress
